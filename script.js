@@ -57,7 +57,7 @@ const sleep = (delayMs) => new Promise((resolve) => setTimeout(resolve, delayMs)
 const ctx = $canvas.getContext('2d')
 
 ctx.fillStyle = 'black'
-ctx.fillRect(0, 0, 800, 800)
+ctx.fillRect(0, 0, 500, 500)
 
 const { width, height } = $canvas
 
@@ -101,8 +101,8 @@ setValues((neighbors, cell, r) => r > width / 10 ? 0 : (Math.random() > 0.5))
 
 const limit = p => Math.max(0, Math.min(1, p))
 
+const imageData = ctx.getImageData(0, 0, width, height)
 const setPixels = () => {
-  const imageData = ctx.getImageData(0, 0, width, height)
   const data = imageData.data
   const prev = 0 + !current
   for (let i = 0; i < data.length; i += 4) {
@@ -127,7 +127,7 @@ const g2 = g(2)
 const g3 = g(3)
 
 async function run () {
-  for (let t = 0; t < 1000000; ++t) {
+  for (let t = 0; ; ++t) {
     current = 0 + !current
     await sleep(0)
     // setValues((neighbors, cell) => neighbors === 3 || (neighbors === 2 && cell))
