@@ -121,7 +121,7 @@ const setPixels = () => {
 
 setPixels()
 
-const g = p0 => p => Math.exp(-((p - p0) * (p - p0)))
+const g = p0 => p => Math.exp(-(p - p0) * (p - p0) * 2.88)
 
 const g2 = g(2)
 const g3 = g(3)
