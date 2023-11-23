@@ -111,7 +111,7 @@ const setPixels = () => {
     const value = cells[current][x][y]
     const prevValue = cells[prev][x][y]
     const diff = Math.abs(value - prevValue)
-    const { r, g, b } = HSVtoRGB(0.25 - limit(diff) / 2, 1, limit(value))
+    const { r, g, b } = HSVtoRGB(0.5 + 0.5 * limit(diff), 0.7, limit(value))
     data[i] = r
     data[i + 1] = g
     data[i + 2] = b
