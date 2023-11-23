@@ -1,11 +1,63 @@
 /* global $canvas */
 
+/* From https://stackoverflow.com/a/17243070/978525
+ * accepts parameters
+ * h  Object = {h:x, s:y, v:z}
+ * OR
+ * h, s, v
+*/
+function HSVtoRGB (h, s, v) {
+  const i = Math.floor(h * 6)
+  const f = h * 6 - i
+  const p = v * (1 - s)
+  const q = v * (1 - f * s)
+  const t = v * (1 - (1 - f) * s)
+  let r, g, b
+  switch (i % 6) {
+    case 0:
+      r = v
+      g = t
+      b = p
+      break
+    case 1:
+      r = q
+      g = v
+      b = p
+      break
+    case 2:
+      r = p
+      g = v
+      b = t
+      break
+    case 3:
+      r = p
+      g = q
+      b = v
+      break
+    case 4:
+      r = t
+      g = p
+      b = v
+      break
+    case 5:
+      r = v
+      g = p
+      b = q
+      break
+  }
+  return {
+    r: Math.round(r * 255),
+    g: Math.round(g * 255),
+    b: Math.round(b * 255)
+  }
+}
+
 const sleep = (delayMs) => new Promise((resolve) => setTimeout(resolve, delayMs))
 
 const ctx = $canvas.getContext('2d')
 
 ctx.fillStyle = 'black'
-ctx.fillRect(0, 0, 600, 600)
+ctx.fillRect(0, 0, 800, 800)
 
 const { width, height } = $canvas
 
@@ -21,9 +73,9 @@ for (let x = 0; x < width; ++x) {
 
 let current = 0
 function setValues (f) {
+  const prev = 0 + !current
   for (let x = 0; x < width; ++x) {
     for (let y = 0; y < width; ++y) {
-      const prev = 0 + !current
       const xm1 = (x + width - 1) % width
       const ym1 = (y + width - 1) % width
       const xp1 = (x + 1) % width
@@ -45,19 +97,24 @@ function setValues (f) {
   }
 }
 
-setValues((neighbors, cell, r) => r > width / 4 ? 0 : (Math.random() > 0.5))
+setValues((neighbors, cell, r) => r > width / 10 ? 0 : (Math.random() > 0.5))
+
+const limit = p => Math.max(0, Math.min(1, p))
 
 const setPixels = () => {
   const imageData = ctx.getImageData(0, 0, width, height)
   const data = imageData.data
+  const prev = 0 + !current
   for (let i = 0; i < data.length; i += 4) {
     const x = Math.trunc((i / 4) / width)
     const y = (i / 4) % height
     const value = cells[current][x][y]
-    const pix = Math.min(255, Math.trunc(256 * value))
-    data[i] = pix // red
-    data[i + 1] = pix // green
-    data[i + 2] = pix // blue
+    const prevValue = cells[prev][x][y]
+    const diff = Math.abs(value - prevValue)
+    const { r, g, b } = HSVtoRGB(0.25 - limit(diff) / 2, 1, limit(value))
+    data[i] = r
+    data[i + 1] = g
+    data[i + 2] = b
   }
   ctx.putImageData(imageData, 0, 0)
 }
