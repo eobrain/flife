@@ -1,4 +1,4 @@
-/* global $canvas */
+/* global $canvas, $spread, $showSpread */
 
 /* From https://stackoverflow.com/a/17243070/978525
  * accepts parameters
@@ -51,6 +51,15 @@ function HSVtoRGB (h, s, v) {
     b: Math.round(b * 255)
   }
 }
+
+let spread
+function update () {
+  $showSpread.innerText = $spread.value
+  spread = Number($spread.value)
+}
+
+update()
+$spread.addEventListener('input', update)
 
 const sleep = (delayMs) => new Promise((resolve) => setTimeout(resolve, delayMs))
 
@@ -121,7 +130,7 @@ const setPixels = () => {
 
 setPixels()
 
-const guassian = p0 => p => Math.exp(-(p - p0) * (p - p0) * 2.88)
+const guassian = p0 => p => Math.exp(-(p - p0) * (p - p0) * spread)
 
 const g2 = guassian(2)
 const g3 = guassian(3)
