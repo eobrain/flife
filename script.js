@@ -80,7 +80,7 @@ function setValues (f) {
       const ym1 = (y + width - 1) % width
       const xp1 = (x + 1) % width
       const yp1 = (y + 1) % width
-      const neighbors =
+      const s =
                 cells[prev][xm1][ym1] +
                 cells[prev][xm1][y] +
                 cells[prev][xm1][yp1] +
@@ -92,12 +92,12 @@ function setValues (f) {
       const dx = x - width / 2
       const dy = y - height / 2
       const r = Math.sqrt(dx * dx + dy * dy)
-      cells[current][x][y] = f(neighbors, cells[prev][x][y], r)
+      cells[current][x][y] = f(s, cells[prev][x][y], r)
     }
   }
 }
 
-setValues((neighbors, cell, r) => r > width / 10 ? 0 : (Math.random() > 0.5))
+setValues((s, cell, r) => r > width / 10 ? 0 : (Math.random() > 0.5))
 
 const limit = p => Math.max(0, Math.min(1, p))
 
@@ -121,20 +121,18 @@ const setPixels = () => {
 
 setPixels()
 
-const g = p0 => p => Math.exp(-(p - p0) * (p - p0) * 2.88)
+const guassian = p0 => p => Math.exp(-(p - p0) * (p - p0) * 2.88)
 
-const g2 = g(2)
-const g3 = g(3)
+const g2 = guassian(2)
+const g3 = guassian(3)
 
 async function run () {
   for (let t = 0; ; ++t) {
     current = 0 + !current
     await sleep(0)
-    // setValues((neighbors, cell) => neighbors === 3 || (neighbors === 2 && cell))
-    // setValues((neighbors, cell) => Math.exp(-(((neighbors - 3 + cell / 2) ** 2) / 0.559)))
-    setValues((neighbors, cell) =>
-      g3(neighbors) + cell * g2(neighbors) * (1.0 / 1.36787944117144)
-    )
+    // setValues((s, p) => s === 3 || (s === 2 && p))
+    // setValues((s, p) => Math.exp(-(((s - 3 + p / 2) ** 2) / 0.559)))
+    setValues((s, p) => g3(s) + p * g2(s) * (1.0 / 1.36787944117144))
 
     setPixels()
   }
