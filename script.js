@@ -71,14 +71,20 @@ ctx.fillRect(0, 0, 500, 500)
 const { width, height } = $canvas
 
 const cells = [[], []]
+const meta = []
 for (let x = 0; x < width; ++x) {
   cells[0][x] = []
   cells[1][x] = []
+  meta[x] = []
   for (let y = 0; y < width; ++y) {
     cells[0][x][y] = -1
     cells[1][x][y] = -1
+    meta[x][y] = {}
   }
 }
+
+let xCogMin = Number.POSITIVE_INFINITY
+let xCogMax = Number.NEGATIVE_INFINITY
 
 let current = 0
 function setValues (f) {
@@ -102,6 +108,19 @@ function setValues (f) {
       const dy = y - height / 2
       const r = Math.sqrt(dx * dx + dy * dy)
       cells[current][x][y] = f(s, cells[prev][x][y], r)
+
+      const mass = (s + cells[prev][x][y])
+      const xCog = mass === 0
+        ? 0
+        : (
+            (x - 1) * (cells[prev][xm1][ym1] + cells[prev][xm1][y] + cells[prev][xm1][yp1]) +
+                    x * (cells[prev][x][ym1] + cells[prev][x][y] + cells[prev][x][yp1]) +
+                    (x + 1) * (cells[prev][xp1][ym1] + cells[prev][xp1][y] + cells[prev][xp1][yp1])
+          ) / mass -
+                x
+      xCogMin = Math.min(xCogMin, xCog)
+      xCogMax = Math.max(xCogMax, xCog)
+      meta[x][y] = { xCog }
     }
   }
 }
@@ -134,6 +153,12 @@ const KKValue = (value, diff) => ({
   v: limit(value ** 0.5)
 })
 
+const KKXcog = (value, diff, { xCog }) => ({
+  h: 0,
+  s: 0,
+  v: limit((xCog - xCogMin) / (xCogMax - xCogMin))
+})
+
 let color
 function updateColor () {
   switch ($color.value) {
@@ -145,6 +170,9 @@ function updateColor () {
       break
     case 'KKDiff':
       color = KKDiff
+      break
+    case 'KKXcog':
+      color = KKXcog
       break
   }
 }
@@ -162,7 +190,7 @@ const setPixels = () => {
     const value = cells[current][x][y]
     const prevValue = cells[prev][x][y]
     const diff = Math.abs(value - prevValue)
-    const { h, s, v } = color(value, diff)
+    const { h, s, v } = color(value, diff, meta[x][y])
     const { r, g, b } = HSVtoRGB(h, s, v)
     data[i] = r
     data[i + 1] = g
