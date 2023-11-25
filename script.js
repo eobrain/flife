@@ -1,4 +1,4 @@
-/* global $canvas, $spread, $showSpread */
+/* global $canvas, $spread, $showSpread, $restart */
 
 /* From https://stackoverflow.com/a/17243070/978525
  * accepts parameters
@@ -106,7 +106,13 @@ function setValues (f) {
   }
 }
 
-setValues((s, cell, r) => r > width / 10 ? 0 : (Math.random() > 0.5))
+function restart () {
+  setValues((s, cell, r) => r > width / 10 ? 0 : (Math.random() > 0.5))
+  current = 0 + !current
+  setValues((s, cell, r) => r > width / 10 ? 0 : (Math.random() > 0.5))
+}
+restart()
+$restart.addEventListener('click', restart)
 
 const limit = p => Math.max(0, Math.min(1, p))
 
