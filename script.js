@@ -1,4 +1,4 @@
-/* global $canvas, $spread, $showSpread, $restart */
+/* global $canvas, $spread, $showSpread, $restart, $color */
 
 /* From https://stackoverflow.com/a/17243070/978525
  * accepts parameters
@@ -53,13 +53,13 @@ function HSVtoRGB (h, s, v) {
 }
 
 let spread
-function update () {
+function updateSpread () {
   $showSpread.innerText = $spread.value
   spread = Number($spread.value)
 }
 
-update()
-$spread.addEventListener('input', update)
+updateSpread()
+$spread.addEventListener('input', updateSpread)
 
 const sleep = (delayMs) => new Promise((resolve) => setTimeout(resolve, delayMs))
 
@@ -116,6 +116,42 @@ $restart.addEventListener('click', restart)
 
 const limit = p => Math.max(0, Math.min(1, p))
 
+const DiffKValue = (value, diff) => ({
+  h: 0.5 + 0.5 * limit(diff),
+  s: 0.7,
+  v: limit(value ** 0.5)
+})
+
+const KKDiff = (value, diff) => ({
+  h: 0,
+  s: 0,
+  v: limit(diff ** 0.5)
+})
+
+const KKValue = (value, diff) => ({
+  h: 0,
+  s: 0,
+  v: limit(value ** 0.5)
+})
+
+let color
+function updateColor () {
+  switch ($color.value) {
+    case 'DiffKValue':
+      color = DiffKValue
+      break
+    case 'KKValue':
+      color = KKValue
+      break
+    case 'KKDiff':
+      color = KKDiff
+      break
+  }
+}
+
+updateColor()
+$color.addEventListener('input', updateColor)
+
 const imageData = ctx.getImageData(0, 0, width, height)
 const setPixels = () => {
   const data = imageData.data
@@ -126,7 +162,8 @@ const setPixels = () => {
     const value = cells[current][x][y]
     const prevValue = cells[prev][x][y]
     const diff = Math.abs(value - prevValue)
-    const { r, g, b } = HSVtoRGB(0.5 + 0.5 * limit(diff), 0.7, limit(value ** 0.5))
+    const { h, s, v } = color(value, diff)
+    const { r, g, b } = HSVtoRGB(h, s, v)
     data[i] = r
     data[i + 1] = g
     data[i + 2] = b

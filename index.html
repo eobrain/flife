@@ -12,9 +12,17 @@
 <body>
     <h1>Life</h1>
     <div>
-        <label for="volume">
-            <input type="range" id="$spread" min="0.1" max="3.5" step="0.01" value="2.88"/>
+        <label>
+            <input type="range" id="$spread" min="0.1" max="3.5" step="0.01" value="2.88" />
             Spread <span id="$showSpread"></span>
+        </label>
+        <label>
+            Color:
+            <select id="$color">
+                <option value="DiffKValue">Diff and Value</option>
+                <option value="KKValue">Value</option>
+                <option value="KKDiff">Diff</option>
+            </select>
         </label>
         <button id="$restart">Restart</button>
     </div>
