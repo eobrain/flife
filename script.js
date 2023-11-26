@@ -219,6 +219,7 @@ function updateRule () {
       rule = conway
       break
   }
+  $spread.parentElement.style.display = rule === gg ? 'block' : 'none'
 }
 
 updateRule()
