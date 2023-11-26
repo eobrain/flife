@@ -5,33 +5,46 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Life</title>
-    <link rel="stylesheet" href="style.css">
+    <!--link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" /-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.6.0.min.css" />
     <script defer src="script.js"></script>
 </head>
 
 <body>
-    <h1>Life</h1>
-    <div>
-        <label>
-            <input type="range" id="$spread" min="0.1" max="3.5" step="0.01" value="2.88" />
-            Spread <span id="$showSpread"></span>
-        </label>
-        <label>
-            Color:
-            <select id="$color">
-                <option value="DiffKValue">Diff and Value</option>
-                <option value="KKValue">Value</option>
-                <option value="KKDiff">Diff</option>
-                <option value="KKXcog">X center of gravity</option>
-            </select>
-        </label>
-        <button id="$restart">Restart</button>
-    </div>
-    <canvas id="$canvas" width="500" height="500"></canvas>
+    <section>
+        <header>
+            <h1>Life</h1>
+            <nav>
+                <label>
+                    <input type="range" id="$spread" min="0.1" max="3.5" step="0.01" value="2.88" />
+                    Spread <span id="$showSpread"></span>
+                </label>
+            </nav>
+            <nav>
+                <label>
+                    Color:
+                    <select id="$color">
+                        <option value="DiffKValue">Diff and Value</option>
+                        <option value="KKValue">Value</option>
+                        <option value="KKDiff">Diff</option>
+                        <option value="KKXcog">X center of gravity</option>
+                    </select>
+                </label>
+            </nav>
+            <nav>
+                <button id="$restart">Restart</button>
+            </nav>
+        </header>
+        <article>
+            <figure>
+                <canvas id="$canvas" width="500" height="500"></canvas>
+            </figure>
+        </article>
+    </section>
 
-    <p>
+    <footer>
         Source code on <a href="https://github.com/eobrain/flife">GitHub</a>
-    </p>
+    </footer>
 </body>
 
 </html>
