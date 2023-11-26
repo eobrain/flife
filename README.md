@@ -1,5 +1,7 @@
 # Floating-point variant of Conway's Game of Life
 
+Source for [flife][1]
+
 The standard Conway Game of Life has the following rule for cell value in the next generation where each cell can contain a Boolean
 
 ```js
@@ -15,3 +17,5 @@ g3(s) + p * g2(s) * K
 ```
 
 where `g3` is a Guassian centered on 3 and `g2` is a Guassian centered on 2, and K is the constant `e / (1 + e)`
+
+[1]: https://eobrain.github.io/flife/
