@@ -14,26 +14,6 @@
     <section>
         <header>
             <h1>Life</h1>
-            <nav>
-                <label>
-                    <input type="range" id="$spread" min="0.1" max="3.5" step="0.01" value="2.88" />
-                    Spread <span id="$showSpread"></span>
-                </label>
-            </nav>
-            <nav>
-                <label>
-                    Color:
-                    <select id="$color">
-                        <option value="DiffKValue">Diff and Value</option>
-                        <option value="KKValue">Value</option>
-                        <option value="KKDiff">Diff</option>
-                        <option value="KKXcog">X center of gravity</option>
-                    </select>
-                </label>
-            </nav>
-            <nav>
-                <button id="$restart">Restart</button>
-            </nav>
         </header>
         <article>
             <figure>
@@ -43,7 +23,36 @@
     </section>
 
     <footer>
-        Source code on <a href="https://github.com/eobrain/flife">GitHub</a>
+        <nav>
+            <label>
+                Spread <span id="$showSpread"></span>
+                <input type="range" id="$spread" min="0.1" max="3.5" step="0.01" value="2.88" />
+            </label>
+        </nav>
+        <nav>
+            <label>
+                Color:
+                <select id="$color">
+                    <option value="KKXcog">X center of gravity</option>
+                    <option value="DiffKValue">Diff and Value</option>
+                    <option value="KKValue">Value</option>
+                    <option value="KKDiff">Diff</option>
+                </select>
+            </label>
+        </nav>
+        <nav>
+            <label>
+                Rule:
+                <select id="$rule">
+                    <option value="gg">Double Guassian</option>
+                    <option value="conway">Conway's Game of Life</option>
+                </select>
+            </label>
+        </nav>
+        <nav>
+            <button id="$restart">Restart</button>
+        </nav>
+    Source code on <a href="https://github.com/eobrain/flife">GitHub</a>
     </footer>
 </body>
 

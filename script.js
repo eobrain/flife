@@ -1,4 +1,4 @@
-/* global $canvas, $spread, $showSpread, $restart, $color */
+/* global $canvas $spread $showSpread $restart $color $rule */
 
 /* From https://stackoverflow.com/a/17243070/978525
  * accepts parameters
@@ -206,13 +206,30 @@ const guassian = p0 => p => Math.exp(-(p - p0) * (p - p0) * spread)
 const g2 = guassian(2)
 const g3 = guassian(3)
 
+const gg = (s, p) => g3(s) + p * g2(s) * (1.0 / 1.36787944117144)
+const conway = (s, p) => s === 3 || (s === 2 && p)
+
+let rule
+function updateRule () {
+  switch ($rule.value) {
+    case 'gg':
+      rule = gg
+      break
+    case 'conway':
+      rule = conway
+      break
+  }
+}
+
+updateRule()
+$rule.addEventListener('input', updateRule)
+
 async function run () {
   for (let t = 0; ; ++t) {
     current = 0 + !current
     await sleep(0)
-    // setValues((s, p) => s === 3 || (s === 2 && p))
     // setValues((s, p) => Math.exp(-(((s - 3 + p / 2) ** 2) / 0.559)))
-    setValues((s, p) => g3(s) + p * g2(s) * (1.0 / 1.36787944117144))
+    setValues(rule)
 
     setPixels()
   }
